@@ -1,6 +1,8 @@
 const express = require("express");
 const routerApi = require("./routes");
 
+const { logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
+
 const app = express();
 const port = 3500;
 
@@ -12,5 +14,13 @@ app.get("/", (req, res) => {
 });
 
 routerApi(app);
+//usar los middlewares despues del ruteo
 
-app.listen(port, ()=> console.log("Servidor express listo en el puerto:" + port));
+//middleware para manejode errores
+app.use(logErrors);
+app.use(boomErrorHandler);
+app.use(errorHandler);
+
+
+app.listen(port, ()=> {
+  console.log("Servidor express listo en el puerto:" + port)});
